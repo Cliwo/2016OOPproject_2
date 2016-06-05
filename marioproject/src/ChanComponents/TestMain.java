@@ -3,6 +3,7 @@ package ChanComponents;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Component;
+import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Insets;
 
@@ -25,11 +26,16 @@ public class TestMain {
 		panel.setLayout(null);
 		
 		Mario mario = new Mario(new ChanAnchorPoint(200,200), "mario.jpg",mainFrame);
-
+		
+		panel.add(new JButton("hi"));
+		mario.setVisible(true);
 		panel.add(mario);
+		panel.setSize(600,600);
+		panel.setLayout(null);
+		
 		
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
-		mainFrame.getContentPane().add(panel);
+		mainFrame.setContentPane(panel);
 		//mainFrame.getContentPane().add(mario);
 		
 		mainFrame.setSize(1000,1000);
