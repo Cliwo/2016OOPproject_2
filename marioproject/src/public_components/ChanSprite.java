@@ -21,15 +21,14 @@ public abstract class ChanSprite extends JComponent{
 	
 	private int myId;
 	private ChanAnchorPoint anchorPoint;
-	private ChanSize size;
 	private Image image; //image=new ImageIcon(스트링값).getImage();
 	private Color tintColor;
-
+	private Dimension hitBox;
 	private JFrame frame;
 	
 	public ChanSprite(ChanAnchorPoint anchorPoint, String imageName, JFrame frame)
 	{	
-		size = new ChanSize();
+
 		final ImageIcon imageIcon = new ImageIcon(imageName);
 		
 		this.myId = spriteList.size(); //내가 갖게될 index
@@ -37,24 +36,31 @@ public abstract class ChanSprite extends JComponent{
 		this.image = imageIcon.getImage();
 		if(image == null)
 			System.out.println("Image Error");
-		this.size.width = image.getWidth(imageIcon.getImageObserver()); //오류나면 null로 교체
-		this.size.height = image.getHeight(imageIcon.getImageObserver());
-		this.frame=frame;
-			
-		System.out.println("Size : "+size.width +" "+size.height);
+		this.hitBox = new Dimension(image.getWidth(imageIcon.getImageObserver()), image.getHeight(imageIcon.getImageObserver()));
+		this.frame=frame;		
+		setBounds(0, 0, 800, 800);
+		
+		System.out.println(getClass().toString() + " Size : "+hitBox.width+" "+hitBox.height + ", Point : "+anchorPoint.xPos + " " + anchorPoint.yPos);
+		//System.out.println("Preffered Size : "+getPreferredSize().width+ " "+ getPreferredSize().height);
 		spriteList.add(this);
 	}
 	
 	
 	
-	void checkColide()
+	public Dimension getHitBox() {
+		return hitBox;
+	}
+
+
+	public void checkCollide()
 	{
 		for(ChanSprite s:spriteList)
 		{
-			if(isOverLaped(s)) // 나와 해당 s 가 겹치는 가?
+			if(isOverLaped(s)&& s!=this) // 나와 해당 s 가 겹치는 가?
 			{
 				collided(s); //그렇다면 양쪽의 collided함수를 부른다.
 				s.collided(this); 
+				System.out.println("Colide called : "+ getClass().toString() +" "+s.getClass().toString());;
 			}
 		}
 	}
@@ -69,10 +75,22 @@ public abstract class ChanSprite extends JComponent{
 		if(tintColor!=null)
 			arg0.setColor(tintColor);
 		//제대로 작동 되는지 나중에 확인
-		arg0.drawImage(image, anchorPoint.xPos, anchorPoint.yPos, this);	
-		System.out.printf("New Sprite paint : %d %d %d %d\n", anchorPoint.xPos,  anchorPoint.yPos, size.width, size.height);
+		arg0.drawImage(image, anchorPoint.xPos, anchorPoint.yPos, this);
+		//frame.getContentPane().setBounds(0,0,200,200);
+		//System.out.printf("New Sprite paint : %d %d %d %d\n", anchorPoint.xPos,  anchorPoint.yPos, getSize().width, getSize().height);
 	}
 	
+	
+	
+	@Override
+	public Dimension getPreferredSize() {
+		// TODO Auto-generated method stub
+		return super.getPreferredSize();
+	}
+
+
+
+
 	public boolean valueInRange(int value, int min, int max)
 	{ 
 		return (value >= min) && (value <= max); 
@@ -85,10 +103,10 @@ public abstract class ChanSprite extends JComponent{
 	
 	public boolean isOverLaped(ChanSprite compare)
 	{
-		return isOverLaped(getSize_(), getAnchorPoint(), compare.getSize_(), compare.getAnchorPoint() );
+		return isOverLaped(getHitBox(), getAnchorPoint(), compare.getHitBox(), compare.getAnchorPoint() );
 	}
 	
-	public boolean isOverLaped(ChanSize s1 , ChanAnchorPoint a1, ChanSize s2 , ChanAnchorPoint a2)
+	public boolean isOverLaped(Dimension s1 , ChanAnchorPoint a1, Dimension s2 , ChanAnchorPoint a2)
 	{
 		/*Point o1LeftUp = new Point(a1);
 		Point o1LeftDown = new Point(a1.xPos, a1.yPos+s1.height);
@@ -112,10 +130,7 @@ public abstract class ChanSprite extends JComponent{
 		return myId;
 	}
 
-	public ChanSize getSize_() {
-		return size;
-	}
-
+	
 	public JFrame getFrame() {
 		return frame;
 	}
@@ -127,7 +142,9 @@ public abstract class ChanSprite extends JComponent{
 
 	public void setAnchorPoint(ChanAnchorPoint anchorPoint) {
 		this.anchorPoint = anchorPoint;
+		//setBounds(anchorPoint.xPos, anchorPoint.yPos, getSize().width, getSize().height);
 		frame.repaint();
+		//frame.getContentPane().repaint();
 	}
 
 
@@ -150,7 +167,9 @@ public abstract class ChanSprite extends JComponent{
 		this.tintColor = tintColor;
 	}
 
-	
+
+
+
 
 
 

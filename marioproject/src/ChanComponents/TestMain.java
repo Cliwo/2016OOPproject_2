@@ -6,7 +6,9 @@ import java.awt.Component;
 import java.awt.FlowLayout;
 import java.awt.Graphics;
 import java.awt.Insets;
+import java.awt.LayoutManager;
 
+import javax.swing.GroupLayout;
 import javax.swing.JButton;
 import javax.swing.JComponent;
 import javax.swing.JFrame;
@@ -23,22 +25,21 @@ public class TestMain {
 		JFrame mainFrame = new JFrame();
 
 		JPanel panel = new JPanel();
+		
+		Mario mario = new Mario(new ChanAnchorPoint(10,550), "mario.jpg",mainFrame);
+		Pipe pipe = new Pipe(new ChanAnchorPoint(400,490), "ÆÄÀÌÇÁ.png", mainFrame);
+		Coin coin = new Coin(new ChanAnchorPoint(250, 470), "coin.png",mainFrame);
+ 		
 		panel.setLayout(null);
-		
-		Mario mario = new Mario(new ChanAnchorPoint(200,200), "mario.jpg",mainFrame);
-		
-		panel.add(new JButton("hi"));
-		mario.setVisible(true);
+		panel.add(pipe);
 		panel.add(mario);
-		panel.setSize(600,600);
-		panel.setLayout(null);
-		
+		panel.add(coin);
+		panel.setVisible(true);
 		
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
-		mainFrame.setContentPane(panel);
-		//mainFrame.getContentPane().add(mario);
+		mainFrame.getContentPane().add(panel);
 		
-		mainFrame.setSize(1000,1000);
+		mainFrame.setSize(800,800);
 		mainFrame.setVisible(true);
 		mainFrame.addKeyListener(new SPRITE_BASIC_KEYBOARD_LISTENER(mario));
 		

@@ -25,6 +25,7 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 		if (!isDoingAction) {
+			obj.checkCollide();
 			switch (arg0.getKeyCode()) {
 			case KeyEvent.VK_UP:
 
@@ -45,6 +46,7 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 								obj.setAnchorPoint(new ChanAnchorPoint(obj
 										.getAnchorPoint().xPos + 2, obj
 										.getAnchorPoint().yPos - 6));
+								obj.checkCollide();
 								//System.out.println("JUMPING : Up , Right");
 								try {
 									sleep(10);
@@ -57,6 +59,7 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 								obj.setAnchorPoint(new ChanAnchorPoint(obj
 										.getAnchorPoint().xPos + 2, obj
 										.getAnchorPoint().yPos + 6));
+								obj.checkCollide();
 								//System.out.println("JUMPING : Down , Right");
 								try {
 									sleep(10);
@@ -70,6 +73,7 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 								obj.setAnchorPoint(new ChanAnchorPoint(obj
 										.getAnchorPoint().xPos - 2, obj
 										.getAnchorPoint().yPos - 6));
+								obj.checkCollide();
 								try {
 									sleep(10);
 								} catch (InterruptedException e) {
@@ -81,6 +85,7 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 								obj.setAnchorPoint(new ChanAnchorPoint(obj
 										.getAnchorPoint().xPos - 2, obj
 										.getAnchorPoint().yPos + 6));
+								obj.checkCollide();
 								try {
 									sleep(10);
 								} catch (InterruptedException e) {
@@ -172,7 +177,7 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 	public void keyReleased(KeyEvent arg0) {
 		switch (arg0.getKeyCode()) {
 		case KeyEvent.VK_RIGHT:
-			System.out.println("KeyReleased : Right");
+			//System.out.println("KeyReleased : Right");
 			onGoing.interrupt();
 			onGoing = null;
 			
@@ -180,7 +185,7 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 			break;
 
 		case KeyEvent.VK_LEFT:
-			System.out.println("KeyReleased : Left");
+			//System.out.println("KeyReleased : Left");
 			onGoing.interrupt();
 			onGoing = null;
 			break;
