@@ -29,11 +29,13 @@ public class TestMain {
 		Mario mario = new Mario(new ChanAnchorPoint(10,550), "mario.jpg",mainFrame);
 		Pipe pipe = new Pipe(new ChanAnchorPoint(400,490), "ÆÄÀÌÇÁ.png", mainFrame);
 		Coin coin = new Coin(new ChanAnchorPoint(250, 470), "coin.png",mainFrame);
- 		
+ 		Indicator indicator = new Indicator(new ChanAnchorPoint(300, 300), "Indicator.jpg", mainFrame);
+		
 		panel.setLayout(null);
 		panel.add(pipe);
 		panel.add(mario);
 		panel.add(coin);
+		panel.add(indicator);
 		panel.setVisible(true);
 		
 		mainFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);		
@@ -43,7 +45,7 @@ public class TestMain {
 		mainFrame.setVisible(true);
 		mainFrame.addKeyListener(new SPRITE_BASIC_KEYBOARD_LISTENER(mario));
 		
-		
+		mario.getListenerFromFrame();
 	}
 
 }

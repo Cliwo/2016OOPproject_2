@@ -18,7 +18,12 @@ public class Coin extends ChanSprite{
 		// TODO Auto-generated method stub
 		if(s instanceof Mario)
 		{
-			
+			if(isVisible())
+			{
+				//∏‘¿∫ Coin»Ωºˆ ¡ı∞°
+				System.out.println("I ate a coint !!");
+			}
+			this.setVisible(false);
 		}
 		else if(s instanceof Pipe)
 		{

@@ -2,6 +2,8 @@ package ChanComponents;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.ImageIcon;
+
 import public_components.ChanAnchorPoint;
 import public_components.ChanSprite;
 
@@ -11,16 +13,95 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 	boolean isDoingAction;
 	int direction;
 
-	Thread onGoing;
+	public Thread onGoing;
+	
 
 	public static final int DIR_RIGHT = 0;
 	public static final int DIR_LEFT = 1;
 
+	public static final int UP_AND_DOWN_SPEED = 6;
+	public static final int JUMP_HORIZONTAL = 2;
+	public static final int RIGHT_LEFT_GROUND = 3;
+	
+	public static final int BOUNCE_UP_AND_DOWN = 2;
+	public static final int BOUNCE_HORIZONTAL = 1;
 	public SPRITE_BASIC_KEYBOARD_LISTENER(ChanSprite obj) {
 		super();
 		this.obj = obj;
 	}
 
+	public void bounce()
+	{
+		if(onGoing!=null)
+			onGoing.interrupt();
+		onGoing = null;
+		onGoing = new Thread(){
+			@Override
+			public void run() {
+				// TODO Auto-generated method stub
+				super.run();
+				isDoingAction = true;
+				if (direction == DIR_LEFT) { /* Go Up */
+					for (int i = 0; i < 5 ; i++) {
+						obj.setAnchorPoint(new ChanAnchorPoint(obj
+								.getAnchorPoint().xPos + BOUNCE_HORIZONTAL, obj
+								.getAnchorPoint().yPos - BOUNCE_UP_AND_DOWN));
+						obj.checkCollide();
+						//System.out.println("JUMPING : Up , Right");
+						try {
+							sleep(30);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					for (int i = 0; i < 5 ; i++) { /* Go Down */
+						obj.setAnchorPoint(new ChanAnchorPoint(obj
+								.getAnchorPoint().xPos + BOUNCE_HORIZONTAL, obj
+								.getAnchorPoint().yPos + BOUNCE_UP_AND_DOWN));
+						obj.checkCollide();
+						//System.out.println("JUMPING : Down , Right");
+						try {
+							sleep(30);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				} else {
+					for (int i = 0; i < 5; i++) {
+						obj.setAnchorPoint(new ChanAnchorPoint(obj
+								.getAnchorPoint().xPos - BOUNCE_HORIZONTAL, obj
+								.getAnchorPoint().yPos - BOUNCE_UP_AND_DOWN));
+						obj.checkCollide();
+						try {
+							sleep(30);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+					for (int i = 0; i < 5; i++) {
+						obj.setAnchorPoint(new ChanAnchorPoint(obj
+								.getAnchorPoint().xPos - BOUNCE_HORIZONTAL, obj
+								.getAnchorPoint().yPos + BOUNCE_UP_AND_DOWN));
+						obj.checkCollide();
+						
+						try {
+							sleep(30);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				}
+				isDoingAction = false;
+			}
+			
+		};
+		onGoing.start();
+	}
+	
 	@Override
 	public void keyPressed(KeyEvent arg0) {
 		// TODO Auto-generated method stub
@@ -41,11 +122,11 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 					public void run() {
 						super.run();
 						isDoingAction = true;
-						if (direction == DIR_RIGHT) {
-							for (int i = 0; i < 15; i++) {
+						if (direction == DIR_RIGHT) { /* Go Up */
+							for (int i = 0; i < 15 ; i++) {
 								obj.setAnchorPoint(new ChanAnchorPoint(obj
-										.getAnchorPoint().xPos + 2, obj
-										.getAnchorPoint().yPos - 6));
+										.getAnchorPoint().xPos + JUMP_HORIZONTAL, obj
+										.getAnchorPoint().yPos - UP_AND_DOWN_SPEED));
 								obj.checkCollide();
 								//System.out.println("JUMPING : Up , Right");
 								try {
@@ -55,10 +136,10 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 									e.printStackTrace();
 								}
 							}
-							for (int i = 0; i < 15; i++) {
+							for (int i = 0; i < 15 ; i++) { /* Go Down */
 								obj.setAnchorPoint(new ChanAnchorPoint(obj
-										.getAnchorPoint().xPos + 2, obj
-										.getAnchorPoint().yPos + 6));
+										.getAnchorPoint().xPos + JUMP_HORIZONTAL, obj
+										.getAnchorPoint().yPos + UP_AND_DOWN_SPEED));
 								obj.checkCollide();
 								//System.out.println("JUMPING : Down , Right");
 								try {
@@ -71,8 +152,8 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 						} else {
 							for (int i = 0; i < 15; i++) {
 								obj.setAnchorPoint(new ChanAnchorPoint(obj
-										.getAnchorPoint().xPos - 2, obj
-										.getAnchorPoint().yPos - 6));
+										.getAnchorPoint().xPos - JUMP_HORIZONTAL, obj
+										.getAnchorPoint().yPos - UP_AND_DOWN_SPEED));
 								obj.checkCollide();
 								try {
 									sleep(10);
@@ -83,9 +164,10 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 							}
 							for (int i = 0; i < 15; i++) {
 								obj.setAnchorPoint(new ChanAnchorPoint(obj
-										.getAnchorPoint().xPos - 2, obj
-										.getAnchorPoint().yPos + 6));
+										.getAnchorPoint().xPos - JUMP_HORIZONTAL, obj
+										.getAnchorPoint().yPos + UP_AND_DOWN_SPEED));
 								obj.checkCollide();
+								
 								try {
 									sleep(10);
 								} catch (InterruptedException e) {
@@ -105,17 +187,18 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 				if (onGoing == null) {
 					onGoing = new Thread() {
 						boolean stopped;
-
+						
 						@Override
 						public void run() {
 							// TODO Auto-generated method stub
 							super.run();
+							obj.setImage(new ImageIcon("right.png").getImage());
 							stopped = false;
 							direction = DIR_RIGHT;
 							while (true) {
 								if (!isDoingAction && !stopped) {
 									obj.setAnchorPoint(new ChanAnchorPoint(obj
-											.getAnchorPoint().xPos + 3, obj
+											.getAnchorPoint().xPos + RIGHT_LEFT_GROUND, obj
 											.getAnchorPoint().yPos));
 									//System.out.println("KeyPressed : Right");
 								}
@@ -143,12 +226,13 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 						public void run() {
 							// TODO Auto-generated method stub
 							super.run();
+							obj.setImage(new ImageIcon("left.png").getImage());
 							stopped = false;
 							direction = DIR_LEFT;
 							while (true) {
 								if (!isDoingAction && !stopped) {
 									obj.setAnchorPoint(new ChanAnchorPoint(obj
-											.getAnchorPoint().xPos - 3, obj
+											.getAnchorPoint().xPos - RIGHT_LEFT_GROUND, obj
 											.getAnchorPoint().yPos));
 									//System.out.println("KeyPressed : Left");
 								}
@@ -178,7 +262,8 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 		switch (arg0.getKeyCode()) {
 		case KeyEvent.VK_RIGHT:
 			//System.out.println("KeyReleased : Right");
-			onGoing.interrupt();
+			if(onGoing!=null)
+				onGoing.interrupt();
 			onGoing = null;
 			
 			//interrupt 시 부 자연스러운 액션이 일어남, 이 부분 마리오가 브레이크 밟게 설정하면 어떨까
@@ -186,7 +271,8 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 
 		case KeyEvent.VK_LEFT:
 			//System.out.println("KeyReleased : Left");
-			onGoing.interrupt();
+			if(onGoing!=null)
+				onGoing.interrupt();
 			onGoing = null;
 			break;
 		}
@@ -196,5 +282,15 @@ public final class SPRITE_BASIC_KEYBOARD_LISTENER implements KeyListener {
 	public void keyTyped(KeyEvent arg0) {
 		// TODO Auto-generated method stub
 	}
+
+	public boolean isDoingAction() {
+		return isDoingAction;
+	}
+
+	public void setDoingAction(boolean isDoingAction) {
+		this.isDoingAction = isDoingAction;
+	}
+	
+	
 
 }

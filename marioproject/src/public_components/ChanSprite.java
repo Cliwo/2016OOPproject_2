@@ -60,7 +60,7 @@ public abstract class ChanSprite extends JComponent{
 			{
 				collided(s); //그렇다면 양쪽의 collided함수를 부른다.
 				s.collided(this); 
-				System.out.println("Colide called : "+ getClass().toString() +" "+s.getClass().toString());;
+				//System.out.println("Colide called : "+ getClass().toString() +" "+s.getClass().toString());;
 			}
 		}
 	}
